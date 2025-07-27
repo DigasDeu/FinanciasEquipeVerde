@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Controle de Pagamentos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Controle de Pagamentos</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Comprovante</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-pessoas">
+      <!-- As linhas serão geradas pelo JS -->
+    </tbody>
+  </table>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <span class="fechar" onclick="fecharModal()">×</span>
+    <img class="modal-conteudo" id="imgComprovante">
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Lista com os nomes das pessoas (adicione os nomes reais aqui)
+    const nomes = [
+      "Christopher Daniel Olivera Freire", "Ramon Viana de Oliveira", 
+      "Leticia Cristyne Freitas Lima", "Luara Cristine Arruda de Souza",
+      "Nilberson Afonso Peixoto", "Isaac Hiroshi Cavalcante Tanisue",
+      "Gabriel", "Helena", "Igor", "Juliana",
+      // ...adicione até 100 nomes
+    ];
+
+    const tbody = document.getElementById('tabela-pessoas');
+  for (let i = 0; i < nomes.length; i++) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${nomes[i]}</td>
+      <td><button class="check-btn" onclick="abrirComprovante('comprovantes/${i + 1}.png')">✔️</button></td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  function abrirComprovante(caminho) {
+    const modal = document.getElementById('modal');
+    const img = document.getElementById('imgComprovante');
+    img.src = caminho;
+    modal.style.display = 'block';
+  }
+
+  function fecharModal() {
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('imgComprovante').src = '';
+  }
+</script>
+  
+</body>
+</html>

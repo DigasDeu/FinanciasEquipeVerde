@@ -41,6 +41,22 @@ th {
   background-color: #45a049;
 }
 
+/* Select de tipo */
+select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
 /* Modal */
 .modal {
   display: none;

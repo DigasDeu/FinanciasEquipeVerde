@@ -13,11 +13,18 @@
       <tr>
         <th>Nome</th>
         <th>Comprovante</th>
+        <th>Valor (R$)</th>
       </tr>
     </thead>
     <tbody id="tabela-pessoas">
       <!-- As linhas serão geradas pelo JS -->
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2" style="text-align: right; font-weight: bold;">Total:</td>
+        <td id="total-valor" style="font-weight: bold;">R$ 0,00</td>
+      </tr>
+    </tfoot>
   </table>
 
   <!-- Modal -->
@@ -33,32 +40,70 @@
       "Christopher Daniel Olivera Freire", "Ramon Viana de Oliveira", 
       "Leticia Cristyne Freitas Lima", "Luara Cristine Arruda de Souza",
       "Nilberson Afonso Peixoto", "Isaac Hiroshi Cavalcante Tanisue",
-      "Gabriel", "Helena", "Igor", "Juliana",
-      // ...adicione até 100 nomes
+      "João Fernandes Souza Brasil", "Renan Miranda de Souza", "Talita Eduarda Paiva da Cruz", "Alex William Pessoa Pureza",
+      "Emanuel Araújo Campos", "Marjoire Goes Lima", 
+      "Ina Louiza Nascimento dos Passos", "Yuane Hilbertina Ferreira Nascimento",
+      "Larrise Brasil Gondim", "Hamilton Menezes de Rodrigues",
+      "Asahp Gabriel Dantas C F Belem", "Lohanna Barroso da Silva Quirino", "Allan Richard Santos de Oliveira", "Jayme da Fonseca Dutra",
+      "Weber Santos Antunes","LAINY OLIVEIRA DOS SANTOS",
+      "John Erick Góes Belizário","Ana Gabriela Pimentel Barroso",
+      "Alaianne Janner Soares Rodrigues","Adarliza Passos Dos Santos",
+      "Nome nâo indentificado","João Paulo Lavareda de Oliveira",
+      "Bianca Tavares Viera","Diego Fernando Pereira da Silva",
     ];
 
+    // Recupera os valores salvos do localStorage ou cria um array vazio
+    let valores = JSON.parse(localStorage.getItem('valoresComprovantes')) || Array(nomes.length).fill('');
+
     const tbody = document.getElementById('tabela-pessoas');
-  for (let i = 0; i < nomes.length; i++) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${nomes[i]}</td>
-      <td><button class="check-btn" onclick="abrirComprovante('comprovantes/${i + 1}.png')">✔️</button></td>
-    `;
-    tbody.appendChild(tr);
-  }
+    for (let i = 0; i < nomes.length; i++) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${nomes[i]}</td>
+        <td><button class="check-btn" onclick="abrirComprovante('comprovantes/${i + 1}.png')">✔️</button></td>
+        <td><input type="number" min="0" step="0.01" class="valor-input" style="width: 90px;" placeholder="0,00" data-index="${i}" value="${valores[i]}"></td>
+      `;
+      tbody.appendChild(tr);
+    }
 
-  function abrirComprovante(caminho) {
-    const modal = document.getElementById('modal');
-    const img = document.getElementById('imgComprovante');
-    img.src = caminho;
-    modal.style.display = 'block';
-  }
+    function abrirComprovante(caminho) {
+      const modal = document.getElementById('modal');
+      const img = document.getElementById('imgComprovante');
+      img.src = caminho;
+      modal.style.display = 'block';
+    }
 
-  function fecharModal() {
-    document.getElementById('modal').style.display = 'none';
-    document.getElementById('imgComprovante').src = '';
-  }
-</script>
+    function fecharModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('imgComprovante').src = '';
+    }
+
+    // Função para atualizar o total e salvar no localStorage
+    function atualizarTotalESalvar() {
+      const inputs = document.querySelectorAll('.valor-input');
+      let total = 0;
+      valores = [];
+      inputs.forEach((input, idx) => {
+        let valor = input.value.replace(',', '.');
+        valores[idx] = valor;
+        const num = parseFloat(valor);
+        if (!isNaN(num)) total += num;
+      });
+      document.getElementById('total-valor').textContent = 'R$ ' + total.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      localStorage.setItem('valoresComprovantes', JSON.stringify(valores));
+      localStorage.setItem('totalComprovantes', total);
+    }
+
+    // Ao carregar a página, já calcula o total
+    atualizarTotalESalvar();
+
+    // Adiciona evento para atualizar o total ao digitar
+    document.addEventListener('input', function(e) {
+      if (e.target.classList.contains('valor-input')) {
+        atualizarTotalESalvar();
+      }
+    });
+  </script>
   
 </body>
 </html>
